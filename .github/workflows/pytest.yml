@@ -1,40 +1,41 @@
 
-name: pytest                                                       # Actions上に表示される名前
+name: pytest                                                   # Actions上に表示される名前
 
-on:                                                                # Job実行のトリガ設定
-  push:                                                            # マスターブランチへのpush
+on:                                                            # Job実行のトリガ設定
+  push:                                                        # マスターブランチへのpush
     branches:
       - master
-  pull_request:                                                    # 開発ブランチのプルリク
+  pull_request:                                                # 開発ブランチのプルリク
     branches:
       - develop
 
 jobs:
-  pytest:                                                          # job-id
-    name: Run tests with pytest                                    # jobの名前
-    runs-on: ubuntu-latest                                         # job実行環境  `ubuntu-latest` を指定
-    steps:                                                         # jobが実行するstepを定義
-      - name: Checkout                                             # step名
-        uses: actions/checkout@v2                                  # リポジトリをチェックアウトする https://github.com/actions/checkout
-    strategy:                                                      # Python のバージョン指定 複数指定可
+  pytest:                                                      # job-id
+    name: Run tests with pytest                                # jobの名前
+    runs-on: ubuntu-latest                                     # job実行環境  `ubuntu-latest` を指定
+    steps:                                                     # jobが実行するstepを定義
+      - name: Checkout                                         # step名
+        uses: actions/checkout@v2                              # リポジトリをチェックアウトする https://github.com/actions/checkout
+    strategy:                                                  # Python のバージョン指定 複数指定可
       matrix:
         python-version: [3.8]
-      - name: Set up Python 3.8${{ matrix.python-version }}        # Python のランタイムをセットアップする https://github.com/actions/setup-python
+      - name: Set up Python 3.8${{ matrix.python-version }}    # Python のランタイムをセットアップする https://github.com/actions/setup-python
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install Poetry                                       # Poetryをインストールする
+      - name: Install Poetry                                   # Poetryをインストールする
         run: |
           curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
-      - name: Add path for Poetry                                  # Poetryのパスを通す
+      - name: Add path for Poetry                              # Poetryのパスを通す
         run: echo "$HOME/.poetry/bin" >> $GITHUB_PATH
       
-      - name: Install Dependencies                                 # PoetryでPython パッケージをインストール
+      - name: Install Dependencies                             # PoetryでPython パッケージをインストール
         run: poetry install --no-interaction
       
-      - name: Run Tests                                            # pytest を実行
-        run: poetry run pytest test --cov=./slack_api_decorator --cov-report=xml
-      - name: Upload coverage to Codecov                           # 上記のstepsが全て完了した場合にcodecovへupload privateならKEY必要
+      - name: Run Tests                                        # pytest を実行
+        run: poetry run pytest test_sample.py --cov-report=xml
+        # run: poetry run pytest test --cov=./slack_api_decorator --cov-report=xml
+      - name: Upload coverage to Codecov                       # 上記のstepsが全て完了した場合にcodecovへupload privateならKEY必要
         if: ${{ matrix.python-version==3.8 }}
         uses: codecov/codecov-action@v1
         with:
