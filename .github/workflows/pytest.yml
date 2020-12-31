@@ -34,7 +34,7 @@ jobs:
         # exit-zeroはすべてのエラーを警告として扱う。 GitHubのエディタの幅は127文字
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
-      run: poetry run pytest test_sample.py --cov-report=xml
+      run: python -m pytest test_sample.py --cov-report=xml
       # run: poetry run pytest test --cov=./slack_api_decorator --cov-report=xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
