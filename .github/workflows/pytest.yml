@@ -13,12 +13,12 @@ jobs:
   pytest:                                                      # job-id
     name: Run tests with pytest                                # jobの名前
     runs-on: ubuntu-latest                                     # job実行環境  `ubuntu-latest` を指定
-    steps:                                                     # jobが実行するstepを定義
-      - name: Checkout                                         # step名
-        uses: actions/checkout@v2                              # リポジトリをチェックアウトする https://github.com/actions/checkout
     strategy:                                                  # Python のバージョン指定 複数指定可
       matrix:
         python-version: [3.8]
+    steps:                                                     # jobが実行するstepを定義
+      - name: Checkout                                         # step名
+        uses: actions/checkout@v2                              # リポジトリをチェックアウトする https://github.com/actions/checkout
       - name: Set up Python 3.8${{ matrix.python-version }}    # Python のランタイムをセットアップする https://github.com/actions/setup-python
         uses: actions/setup-python@v1
         with:
