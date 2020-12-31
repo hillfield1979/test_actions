@@ -1,6 +1,4 @@
-
 name: pytest                                                   # Actions上に表示される名前
-
 on:                                                            # Job実行のトリガ設定
   push:                                                        # マスターブランチへのpush
     branches:
@@ -13,16 +11,13 @@ jobs:
   pytest:                                                      # job-id
     name: Run tests with pytest                                # jobの名前
     runs-on: ubuntu-latest                                     # job実行環境  `ubuntu-latest` を指定
-    strategy:                                                  # Python のバージョン指定 複数指定可
-      matrix:
-        python-version: [3.7, 3.8]
     steps:                                                     # jobが実行するstepを定義
     - name: Checkout                                         # step名
       uses: actions/checkout@v2                              # リポジトリをチェックアウトする https://github.com/actions/checkout
-    - name: Set up Python ${{ matrix.python-version }}    # Python のランタイムをセットアップする https://github.com/actions/setup-python
+    - name: Set up Python 3.8    # Python のランタイムをセットアップする https://github.com/actions/setup-python
       uses: actions/setup-python@v1
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.8
     - name: Install Poetry                                   # Poetryをインストールする
       run: |
         curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
@@ -34,7 +29,6 @@ jobs:
       run: poetry run pytest test_sample.py --cov-report=xml
       # run: poetry run pytest test --cov=./slack_api_decorator --cov-report=xml
     - name: Upload coverage to Codecov                       # 上記のstepsが全て完了した場合にcodecovへupload privateならKEY必要
-      if: ${{ matrix.python-version==3.8 }}
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
