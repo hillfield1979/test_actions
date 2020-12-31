@@ -5,5 +5,5 @@ jobs:
   build:
     name: Greeting
     runs-on: ubuntu-latest
-    step:
+    steps:
     -run: echo "Hello , World!"
