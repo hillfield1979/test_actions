@@ -19,7 +19,7 @@ jobs:
     steps:                                                     # jobが実行するstepを定義
     - name: Checkout                                         # step名
       uses: actions/checkout@v2                              # リポジトリをチェックアウトする https://github.com/actions/checkout
-    - name: Set up Python 3.8${{ matrix.python-version }}    # Python のランタイムをセットアップする https://github.com/actions/setup-python
+    - name: Set up Python ${{ matrix.python-version }}    # Python のランタイムをセットアップする https://github.com/actions/setup-python
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
@@ -28,10 +28,8 @@ jobs:
         curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
     - name: Add path for Poetry                              # Poetryのパスを通す
       run: echo "$HOME/.poetry/bin" >> $GITHUB_PATH
-    
     - name: Install Dependencies                             # PoetryでPython パッケージをインストール
       run: poetry install --no-interaction
-    
     - name: Run Tests                                        # pytest を実行
       run: poetry run pytest test_sample.py --cov-report=xml
       # run: poetry run pytest test --cov=./slack_api_decorator --cov-report=xml
@@ -42,3 +40,4 @@ jobs:
         file: ./coverage.xml
         name: codecov-umbrella
         fail_ci_if_error: true
+# https://qiita.com/gsy0911/items/abf48168cd78ba12e199
