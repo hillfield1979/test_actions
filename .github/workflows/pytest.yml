@@ -24,7 +24,7 @@ jobs:
     - name: Add path for Poetry
       run: echo "$HOME/.poetry/bin" >> $GITHUB_PATH
     - name: Install Dependencies
-      run: poetry install --no-interaction
+      run: poetry install pytest --no-interaction
     - name: Run Tests
       run: poetry run pytest test_sample.py --cov-report=xml
       # run: poetry run pytest test --cov=./slack_api_decorator --cov-report=xml
