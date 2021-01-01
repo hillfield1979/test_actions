@@ -18,8 +18,7 @@ jobs:
     steps:												# jobが実行するstepを定義
     - name: Checkout									# step:Checkout
       uses: actions/checkout@v2							# リポジトリをチェックアウトする https://github.com/actions/checkout
-    - name: Set up Python ${{ matrix.python-version }}
-    													# step:Set up Python
+    - name: Set up Python ${{ matrix.python-version }}	# step:Set up Python
       uses: actions/setup-python@v2						# Python のランタイムをセットアップする https://github.com/actions/setup-python
       with:
         python-version: ${{ matrix.python-version }}
