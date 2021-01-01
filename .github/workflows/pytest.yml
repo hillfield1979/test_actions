@@ -1,42 +1,42 @@
-name: pytest
-on:
-  push:
+name: pytest				# Actions上に表示される名前
+on:							# Job実行のトリガ設定
+  push:						# mainブランチへのpush
     branches:
     - main
-  pull_request:
+  pull_request:				# 開発ブランチのプルリク
     branches:
     - develop
 
 jobs:
-  pytest:
-    name: Run tests with pytest
-    runs-on: ubuntu-latest
-    strategy:
+  pytest:								# job-id=pytest
+    name: Run tests with pytest			# jobの名前
+    runs-on: ubuntu-latest				# job実行環境  `ubuntu-latest` を指定
+    strategy:							# Python のバージョン指定 複数指定可
       matrix:
         python-version: [3.8]
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+    steps:												# jobが実行するstepを定義
+    - name: Checkout									# step:Checkout
+      uses: actions/checkout@v2							# リポジトリをチェックアウトする https://github.com/actions/checkout
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+    													# step:Set up Python
+      uses: actions/setup-python@v2						# Python のランタイムをセットアップする https://github.com/actions/setup-python
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
+    - name: Install dependencies						# step:依存ライブラリをインストール
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest pytest-cov pytest-mock
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
+    - name: Lint with flake8							# flake8でLinterを実行
       run: |
         # Python 構文エラーまたは未定義の名前がある場合はビルドを停止する
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zeroはすべてのエラーを警告として扱う。 GitHubのエディタの幅は127文字
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
+    - name: Test with pytest							# step:pytest を実行
       run: python -m pytest test_sample.py --cov=. --cov-report=xml
-      # run: poetry run pytest test --cov=./slack_api_decorator --cov-report=xml
-    - name: Upload coverage to Codecov
+    - name: Upload coverage to Codecov					# step:カバレッジ計測結果をcodecovにUpload
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
